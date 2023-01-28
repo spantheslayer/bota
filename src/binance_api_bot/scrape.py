@@ -44,13 +44,13 @@ class Scrape:
                     logger = logging.getLogger()
                     logger.error(e, exc_info=True)
 
-    async def process_trader(self, trader: str):
+    async def process_trader(self, trader: dict[str, str]):
         """Look for position changes for trader.
 
         Args:
             trader (dict[str,str]):
         """
-        encrypted_uid = trader
+        encrypted_uid = trader["encryptedUid"]
         latest_positions_json = await self.sdk.list_positions(encrypted_uid)
         latest_positions = latest_positions_json["data"]["otherPositionRetList"]
 
@@ -119,7 +119,7 @@ class Scrape:
 
     async def send_closed_positions(
         self,
-        trader,
+        trader: dict[str, str],
         latest_positions_df: pd.DataFrame,
         old_positions_df: pd.DataFrame,
     ):
